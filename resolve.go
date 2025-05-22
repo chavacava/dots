@@ -429,13 +429,10 @@ func matchPackagesInFS(pattern string) []string {
 	// We need to preserve the ./ for pattern matching
 	// and in the returned import paths.
 	prefix := ""
-	switch {
-	case strings.HasPrefix(pattern, "./"):
+	if strings.HasPrefix(pattern, "./") {
 		prefix = "." + pathSeparator
-	case strings.HasPrefix(pattern, "../"):
-		prefix = ".." + pathSeparator
 	}
-	println("matchPackagesInFS prefix", dir)
+	println("matchPackagesInFS prefix", prefix)
 
 	match := matchPattern(pattern)
 
