@@ -420,8 +420,11 @@ func matchPackagesInFS(pattern string) []string {
 	// Could be smarter but this one optimization
 	// is enough for now, since ... is usually at the
 	// end of a path.
+	println("matchPackagesInFS pattern", pattern)
 	i := strings.Index(pattern, "...")
-	dir, _ := path.Split(pattern[:i])
+	println("matchPackagesInFS i", i)
+	println("matchPackagesInFS pattern[:i]", pattern[:i])
+	dir, _ := filepath.Split(pattern[:i])
 	println("matchPackagesInFS dir", dir)
 
 	// pattern begins with ./ or ../.
