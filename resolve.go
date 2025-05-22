@@ -161,6 +161,7 @@ func resolvePattern(pattern string) ([][]string, error) {
 	var matches []string
 
 	if strings.HasSuffix(pattern, threeDotsPattern) && isDir(pattern[:len(pattern)-len(threeDotsPattern)]) {
+		println("resolvePattern will matchPackagesInFS with pattern ", pattern)
 		dirsRun = 1
 		for _, dirname := range matchPackagesInFS(pattern) {
 			matches = append(matches, dirname)
@@ -421,15 +422,21 @@ func matchPackagesInFS(pattern string) []string {
 	// end of a path.
 	i := strings.Index(pattern, "...")
 	dir, _ := path.Split(pattern[:i])
+	println("matchPackagesInFS dir", dir)
 
 	// pattern begins with ./ or ../.
 	// path.Clean will discard the ./ but not the ../.
 	// We need to preserve the ./ for pattern matching
 	// and in the returned import paths.
 	prefix := ""
-	if strings.HasPrefix(pattern, "./") {
-		prefix = "./"
+	switch {
+	case strings.HasPrefix(pattern, "./"):
+		prefix = "." + pathSeparator
+	case strings.HasPrefix(pattern, "../"):
+		prefix = ".." + pathSeparator
 	}
+	println("matchPackagesInFS prefix", dir)
+
 	match := matchPattern(pattern)
 
 	var pkgs []string
@@ -457,6 +464,7 @@ func matchPackagesInFS(pattern string) []string {
 		}
 
 		name := prefix + filepath.ToSlash(path)
+		println("matchPackagesInFS name", name)
 		if !match(name) {
 			return nil
 		}
