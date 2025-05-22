@@ -460,10 +460,11 @@ func matchPackagesInFS(pattern string) []string {
 		_, elem := filepath.Split(path)
 		dot := strings.HasPrefix(elem, ".") && elem != "." && elem != ".."
 		if dot || strings.HasPrefix(elem, "_") || elem == "testdata" {
+			println("matchPackagesInFS skipping path/element", path, elem)
 			return filepath.SkipDir
 		}
 
-		name := prefix + filepath.ToSlash(path)
+		name := prefix + path
 		println("matchPackagesInFS name", name)
 		if !match(name) {
 			return nil
