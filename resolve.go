@@ -236,11 +236,6 @@ func importPathsNoDotExpansion(args []string) []string {
 			if a == "./." {
 				a = "."
 			}
-		} else if strings.HasPrefix(a, "../") {
-			a = "./" + path.Clean(a)
-			if a == "./." {
-				a = "."
-			}
 		} else {
 			a = path.Clean(a)
 		}
