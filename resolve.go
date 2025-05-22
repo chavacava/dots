@@ -149,6 +149,10 @@ func resolvePatternsIgnoringErrors(patterns []string) ([][]string, error) {
 	return files, nil
 }
 
+const pathSeparator = string(os.PathSeparator)
+
+var threeDotsPattern = pathSeparator + "..."
+
 func resolvePattern(pattern string) ([][]string, error) {
 	// dirsRun, filesRun, and pkgsRun indicate whether golint is applied to
 	// directory, file or package targets. The distinction affects which
@@ -156,7 +160,7 @@ func resolvePattern(pattern string) ([][]string, error) {
 	var dirsRun, filesRun, pkgsRun int
 	var matches []string
 
-	if strings.HasSuffix(pattern, "/...") && isDir(pattern[:len(pattern)-len("/...")]) {
+	if strings.HasSuffix(pattern, threeDotsPattern) && isDir(pattern[:len(pattern)-len(threeDotsPattern)]) {
 		dirsRun = 1
 		for _, dirname := range matchPackagesInFS(pattern) {
 			matches = append(matches, dirname)
